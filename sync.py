@@ -16,7 +16,8 @@ import argparse, io, json, os, sys, time, shutil, datetime, subprocess
 import sqlite3, uuid, hashlib
 
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8", errors="replace")
-REPO = r"D:\WorkBuddy\workbuddy-migrate\agentctxsync\mcp"
+BASE = os.path.dirname(os.path.abspath(__file__))
+REPO = os.path.join(BASE, "agentctxsync", "mcp")   # adapters from the agentctxsync repo
 sys.path.insert(0, REPO)
 from adapters.workbuddy import WorkBuddyAdapter
 from adapters.dsh import DshAdapter
