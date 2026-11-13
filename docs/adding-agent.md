@@ -59,7 +59,7 @@ class MyAgentAdapter:
 agentctxsync 项目（MIT）已实现 7 个 agent 的适配器：
 - WorkBuddy、DSH、Hermes、OpenCode、Reasonix、OpenClaw、Oh My Pi
 
-仓库：github.com/anthropics/agentctxsync → `mcp/adapters/`
+仓库：github.com/westsource/agentctxsync → `mcp/adapters/`
 
 如果你的 agent 已在其中，直接引用即可。否则参照 `adapters/_template.py` 实现。
 
