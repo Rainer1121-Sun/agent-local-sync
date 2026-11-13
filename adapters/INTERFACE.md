@@ -5,7 +5,7 @@
 ## 获取方式
 
 ```bash
-git clone https://github.com/anthropics/agentctxsync.git
+git clone https://github.com/westsource/agentctxsync.git
 ```
 
 将 `mcp/adapters/` 目录放到本项目的 `adapters/` 下，或在 config.json 中指定 `adapters_path`。
