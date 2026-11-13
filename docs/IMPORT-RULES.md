@@ -1,6 +1,6 @@
 # Qoder 桌面版「WorkBuddy 数据导入」规则导出
 
-导出时间：2026-11-13 　适用版本：Qoder CN 0.5.7（`D:/sofeware/Qoder CN/resources/app.asar`）
+导出时间：2026-11-13 　适用版本：Qoder CN 0.5.7（`<Qoder 安装目录>/resources/app.asar`）
 来源：`app.asar` → `/out/main/electronMain.js` 反混淆代码 + `sessionMigration.sqlite` 台账实测
 配套脚本：同目录 `diagnose_structure.py`（校验器复现）、`repair_qids.py`（修复器）
 
@@ -18,8 +18,8 @@
 
 | 项 | 值 | 代码依据 |
 |---|---|---|
-| 会话正文 | `C:/Users/Rain/.workbuddy/projects/<工作区slug>/<sessionId>.jsonl` | 逐行流式读取 `Eqx()` |
-| 会话元数据 | `C:/Users/Rain/.workbuddy/workbuddy.db` 的 `sessions` 表 | 候选快照 `candidate_snapshot` |
+| 会话正文 | `C:/Users/<YOU>/.workbuddy/projects/<工作区slug>/<sessionId>.jsonl` | 逐行流式读取 `Eqx()` |
+| 会话元数据 | `C:/Users/<YOU>/.workbuddy/workbuddy.db` 的 `sessions` 表 | 候选快照 `candidate_snapshot` |
 | 中间副本 | 导入前先把 jsonl **原子复制**到临时目录再解析 | `QEe()` |
 | 落地台账 | `%APPDATA%/com.qodercn.app.stable/sessionMigration.sqlite` | `migration_ledger` / `import_job` / `import_job_item` |
 | 目标库 | 同目录 `main.sqlite`（`chat_sessions` / `chat_session_messages` / `workspaces`） | — |
@@ -82,7 +82,7 @@ message  ·  reasoning  ·  function_call  ·  function_call_result
 探针失败即 `WORKBUDDY_SOURCE_EXECUTION_UNAVAILABLE`，**根本走不到结构校验**。
 
 本次根因：Qoder 主进程的 PATH 里没有 `git`，日志表现为 `git_not_found` / `ENOENT`。
-修复：把 Qoder 自带 git（`C:\Users\Rain\.qoder-cn\bin\git\cmd`）加入用户 PATH 并重启主进程。
+修复：把 Qoder 自带 git（`C:\Users\<YOU>\.qoder-cn\bin\git\cmd`）加入用户 PATH 并重启主进程。
 
 ---
 
@@ -110,7 +110,7 @@ message  ·  reasoning  ·  function_call  ·  function_call_result
 |---|---|---|
 | `WORKBUDDY_STRUCTURE_INVALID` | 6 → 已修复并成功导入 | 重命名重复 `q-N` id，断开环 |
 | `WORKBUDDY_SOURCE_EXECUTION_UNAVAILABLE` | 5 → 3 条修复 PATH 后成功 | 加 git 到 PATH + 重启 |
-| └ 其中 2 条（申请重庆邮电大学教育邮箱 / 奇思妙想）解锁后转为 `STRUCTURE_INVALID` | 2 | 同一个 `q-N` 环，**已于 2026-11-13 08:03 修复**（备份 `backup/20261113-080351/`），待界面重新勾选导入 |
+| └ 其中 2 条人工会话（标题从略）解锁后转为 `STRUCTURE_INVALID` | 2 | 同一个 `q-N` 环，**已于 2026-11-13 08:03 修复**（备份目录按时间戳命名），待界面重新勾选导入 |
 
 复现校验器对以上样本的预测与实际导入结果**完全一致**（修复过的 2 个文件结构判 OK、成功导入；未修复的 2 个判「CYCLE at q-1」、失败）。
 
@@ -119,7 +119,7 @@ message  ·  reasoning  ·  function_call  ·  function_call_result
 ## 8. 自查与修复流程
 
 ```bash
-cd /d/WorkBuddy/workbuddy-migrate/qoder-sync
+cd <本仓库目录>/qoder-sync
 python diagnose_structure.py            # 复现校验器，打印 CYCLE / DANGLING / ROOT COUNT / NO user message
 python repair_qids.py                   # 干跑：内存修复 + 结构复检
 python repair_qids.py --apply           # 备份到 backup/<时间戳>/ 后写回
