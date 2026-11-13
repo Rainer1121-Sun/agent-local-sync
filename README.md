@@ -57,7 +57,8 @@ agent-local-sync/
 ├── qoder_id_map.json      ← ID 映射示例
 ├── docs/
 │   ├── architecture.md    ← 架构设计详解
-│   └── adding-agent.md    ← 如何添加新 agent 适配器
+│   ├── adding-agent.md    ← 如何添加新 agent 适配器
+│   └── IMPORT-RULES.md    ← Qoder「WorkBuddy 数据导入」校验规则逆向
 └── adapters/              ← 适配器接口说明（引用 agentctxsync MIT）
     └── INTERFACE.md
 ```
@@ -65,7 +66,7 @@ agent-local-sync/
 ## 快速开始（以 WB + DSH + Qoder 为例）
 
 1. 安装依赖：`pip install zstandard`
-2. 获取适配器：`git clone https://github.com/anthropics/agentctxsync`（MIT），将 `mcp/adapters/` 放到本目录
+2. 获取适配器：`git clone https://github.com/westsource/agentctxsync`（MIT），将 `mcp/adapters/` 放到本目录
 3. 编辑 `config.example.json` → `config.json`，填入你的路径
 4. 关闭 WB 和 DSH
 5. `python sync.py --apply`
