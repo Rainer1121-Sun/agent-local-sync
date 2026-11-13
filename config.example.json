@@ -1,1 +1,35 @@
-{"agents": {"workbuddy": {"home": "C:/Users/<YOU>/.workbuddy", "process_name": "WorkBuddy.exe"}, "dsh": {"home": "<DSH 安装目录>/conversation-data/home/sessions", "process_name": "DeepSeek Harness.exe"}, "qoder": {"db": "C:/Users/<YOU>/AppData/Roaming/com.qodercn.app.stable/main.sqlite", "process_name": null, "note": "WAL mode, can write while running"}}, "authoritative_source": "workbuddy", "automation_filter_patterns": ["每日自动签到", "每日岗位巡检", "自动签到", "岗位巡检"], "panel_port": 19528, "watcher_poll_seconds": 15, "adapters_path": "./agentctxsync/mcp"}
+{
+  "_note": "描述性参考。sync.py / sync_watcher.py / panel.py 都不读取本文件：路径在运行时自动发现（见各端 discovery 字段），要改位置请改 sync.py 顶部常量或设环境变量。",
+  "agents": {
+    "workbuddy": {
+      "home": "C:/Users/<YOU>/.workbuddy",
+      "discovery": "环境变量 WORKBUDDY_HOME；否则跟随桌面 app 最近一次启动的 home（同机可能装有两代 WorkBuddy）",
+      "process_name": "WorkBuddy.exe",
+      "roles_observed": ["assistant", "tool", "user"],
+      "cannot_hold": []
+    },
+    "dsh": {
+      "home": "conversation-data/home/sessions",
+      "discovery": "环境变量 DSH_HOME；否则 ~/.dsh/sessions",
+      "process_name": "DeepSeek Harness.exe",
+      "roles_observed": ["assistant", "user"],
+      "cannot_hold": ["system"],
+      "note": "v4 事件流没有 system 的位置，对应 sync.py 的 ROLES_LOST"
+    },
+    "qoder": {
+      "db": "C:/Users/<YOU>/AppData/Roaming/com.qodercn.app.stable/main.sqlite",
+      "discovery": "%APPDATA%/com.qodercn.app.stable/main.sqlite",
+      "process_name": "Qoder CN.exe",
+      "roles_observed": ["assistant", "user", "system"],
+      "cannot_hold": [],
+      "write_policy": "app 运行中时该端整体推迟；即使已关闭，仍按 updated_at 新鲜度跳过可能被 app 持有的会话；每次写前备份 main.sqlite"
+    }
+  },
+  "authoritative_source": "workbuddy",
+  "automation_filter_patterns": ["每日自动签到", "每日岗位巡检", "自动签到", "岗位巡检"],
+  "panel_port": 19528,
+  "watcher_poll_seconds": 15,
+  "watcher_heartbeat_seconds": 900,
+  "adapters_path": "./agentctxsync/mcp",
+  "subprocess_creationflags": "CREATE_NO_WINDOW —— 从 pythonw 启动时子进程不再新开控制台（否则会反复闪窗）"
+}
